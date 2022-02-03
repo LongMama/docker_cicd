@@ -1,24 +1,38 @@
 version: "3.9"
 
 services:
-  web:
+  blog:
     build:
       context: .
       dockerfile: dockerfiles/Dockerfile
     restart: always
-    ports:
-      - "80:8000"
     env_file:
-      - dockerfiles/env.django
+      - env.postgres
+    expose:
+      - 3000
     depends_on:
       - database
 
   database:
-    image: postgres:12-alpine
+    image: postgres
     restart: always
-    volumes:
-      - /tmp/postgresql:/var/lib/postgresql/data
+    env_file:
+      - env.postgres
     expose:
       - 5432
-    env_file:
-      - dockerfiles/env.postgres
+    volumes:
+      - /tmp/database:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    expose:
+      - 6379
+
+  nginx:
+    build:
+      context: .
+      dockerfile: dockerfiles/nginx/Dockerfile
+    restart: always
+    ports:
+      - "80:80"

@@ -1,18 +1,16 @@
-FROM python:3.8.10-slim
+FROM ruby:3.0.3-slim
 
-ENV PYTHONBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+RUN apt-get update -qq && apt-get install -y build-essential
+RUN apt-get install -y libxml2-dev libxslt1-dev libpq-dev
 
 WORKDIR /app
 
-COPY django_app/requirements.txt .
+COPY simple_blog/Gemfile* ./
+RUN bundle install
+
+COPY simple_blog/. .
+
 COPY dockerfiles/docker-entrypoint.sh .
-
-RUN pip install -r requirements.txt
 RUN ["chmod", "+x", "docker-entrypoint.sh"]
-
-EXPOSE 8000
-
-COPY django_app/. .
 
 ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -1,1 +1,1 @@
-bare django project for testing
+bare ruby on rails project for testing
