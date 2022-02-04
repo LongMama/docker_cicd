@@ -1,1 +1,1 @@
-bare ruby on rails project for testing
+Taken from https://github.com/buildpacks/sample-java-app for tests
